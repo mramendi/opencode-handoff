@@ -45,7 +45,7 @@ OpenCode fetches unpinned plugins from npm on each startup; pinned versions are 
 1. Have a conversation in OpenCode with some context
 2. When ready to continue in a fresh session, type `/handoff <your goal>`
 3. A review dialog opens with the handoff draft; edit it if needed and press Enter to send (Esc cancels)
-4. A new session starts with the prompt and the referenced files, and the TUI switches to it
+4. A new session starts with the prompt and the file manifest, and the TUI switches to it
 
 **Example:**
 
