@@ -4,7 +4,9 @@ Create focused handoff prompts for continuing work in new sessions.
 
 Inspired by Amp's handoff command - see their [post](https://ampcode.com/news/handoff) and [manual](https://ampcode.com/manual#handoff) about it.
 
-This is the Misha Ramendik fork that replaces @ inclusion in handoffs with bare filenames to enable context management by the new thread, which will use tools to read files.
+This is the Misha Ramendik fork that replaces @ inclusion in handoffs with bare filenames to enable context management by the new thread, which will use tools to read files. 
+This version (on the mramendi main branch) also removes the npm installation approach as the npm is owned by the original; a pull request version without this modification is in the
+`noattach-pr` branch - I am not suggesting  changing the installation approach.
 
 ## Features
 
