@@ -4,13 +4,14 @@ Create focused handoff prompts for continuing work in new sessions.
 
 Inspired by Amp's handoff command - see their [post](https://ampcode.com/news/handoff) and [manual](https://ampcode.com/manual#handoff) about it.
 
-This is the Misha Ramendik fork that replaces @ ionclusion in forks with bare filenmes to enable context management by the new thread, which will use tools to read files.
+This is the Misha Ramendik fork that replaces @ inclusion in handoffs with bare filenames to enable context management by the new thread, which will use tools to read files.
 
 ## Features
 
 - `/handoff <goal>` command that analyzes the conversation and generates a continuation prompt
-- Guides the AI to include relevant `@file` references so the next session starts with context loaded
-- Opens the handoff prompt in an editable review dialog, then starts a new session with it and the referenced files
+- Builds a file manifest — each file listed with a careful description of exactly what is in it — so the next session knows what to read before reading anything
+- Attaches no file contents: the new session reads each listed file itself with tools, in the order it prefers
+- Opens the handoff prompt in an editable review dialog, then starts a new session with it and the manifest
 - `read_session` tool for retrieving full conversation transcripts from previous sessions when the handoff summary isn't sufficient
 
 ## Requirements
@@ -54,7 +55,7 @@ OpenCode fetches unpinned plugins from npm on each startup; pinned versions are 
 
 The AI analyzes the conversation, extracts key decisions and relevant files, generates a focused prompt, and opens it for review before starting a new session.
 
-Every `@path` in the sent text is attached, so editing the references changes the attached files. Review needs the terminal UI showing the source session; otherwise (for example with `opencode run` or the desktop app) the session starts without review.
+The handoff text carries a `## Files` manifest — each path with a description of its contents — and no file contents are attached: the new session reads each file itself with tools. The manifest is part of the editable review text, so editing it changes what the new session is told to read. Review needs the terminal UI showing the source session; otherwise (for example with `opencode run` or the desktop app) the session starts without review.
 
 To always skip review, set the `review` option to `false`:
 
