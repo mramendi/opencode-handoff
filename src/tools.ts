@@ -93,34 +93,47 @@ export const HandoffSession = (ctx: Context, review: ReviewDraft): ToolInfo => (
   },
 })
 
+/** Files above this importance rank are rendered under a separate "other context" heading. */
+const MAIN_MANIFEST_LIMIT = 10
+
 /**
  * Render the manifest section appended to the handoff text. Bullets only —
- * descriptions travel as text, never as attachments.
+ * descriptions travel as text, never as attachments. The array is expected in
+ * importance order; with more than MAIN_MANIFEST_LIMIT entries, the top of
+ * the list becomes the main manifest and the rest is demoted to "other
+ * context".
  */
 function buildFileManifest(files?: HandoffFile[]): string | undefined {
   if (!files?.length) return undefined
-  const bullets = files.map((file) => {
-    const filepath = file.path.replace(/^@/, "").trim()
-    const description = file.description.replace(/\s+/g, " ").trim()
-    return `- \`${filepath}\` — ${description}`
-  })
-  return ["## Files", "", ...bullets].join("\n")
+  const render = (entries: HandoffFile[]) =>
+    entries.map((file) => {
+      const filepath = file.path.replace(/^@/, "").trim()
+      const description = file.description.replace(/\s+/g, " ").trim()
+      return `- \`${filepath}\` — ${description}`
+    })
+  if (files.length <= MAIN_MANIFEST_LIMIT) return ["## Files", "", ...render(files)].join("\n")
+  return [
+    "## Files",
+    "",
+    ...render(files.slice(0, MAIN_MANIFEST_LIMIT)),
+    "",
+    "## Other context",
+    "",
+    "Listed for completeness; lower priority — read only if the main files leave a gap.",
+    "",
+    ...render(files.slice(MAIN_MANIFEST_LIMIT)),
+  ].join("\n")
 }
 
 /**
- * Count the bullets in the draft's `## Files` manifest, so a user-edited
- * draft (the TUI edits only the text) still reports a real number.
+ * Count every bullet after the `## Files` heading — both importance ranks —
+ * so a user-edited draft (the TUI edits only the text) still reports a real
+ * number.
  */
 function countListedFiles(text: string): number {
   const section = text.split(/^## Files[^\n]*\n/m)[1]
   if (!section) return 0
-  let count = 0
-  for (const line of section.split("\n")) {
-    if (/^- /.test(line)) count++
-    else if (line.trim() === "") continue
-    else break
-  }
-  return count
+  return [...section.matchAll(/^- /gm)].length
 }
 
 /**

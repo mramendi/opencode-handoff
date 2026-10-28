@@ -20,7 +20,9 @@ Analyze this conversation and extract what matters for continuing the work.
 
 1. Build a file manifest for the next session
 
-   List the files that matter for continuing this work: files that will be edited, dependencies being touched, relevant tests, configs, and key reference docs. Be generous—the cost of listing an extra file is low; missing a critical one means another archaeology dig. Target 8-15 files, up to 20 for complex work.
+   List the files that matter for continuing this work: files that will be edited, dependencies being touched, relevant tests, configs, and key reference docs. Listing is VERY cheap—each file costs one line and the new session reads nothing it has not chosen to read—so there is no upper bound. List every file that could matter; missing a critical one means another archaeology dig.
+
+   Order the files by importance, most important first. If there are more than 10, the most important 10 become the main manifest and the rest are listed separately as "other context".
 
    For each file, describe exactly what is in it: the key functions, types, or sections it contains; its current state where that matters (partial edits, known failures, TODOs); and why it matters for this work. Name concrete symbols—a description like "config file" is useless; "test/tools.test.ts: covers handoff_session draft assembly and ReadSession transcript formatting" is usable.
 

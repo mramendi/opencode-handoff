@@ -55,7 +55,7 @@ OpenCode fetches unpinned plugins from npm on each startup; pinned versions are 
 
 The AI analyzes the conversation, extracts key decisions and relevant files, generates a focused prompt, and opens it for review before starting a new session.
 
-The handoff text carries a `## Files` manifest — each path with a description of its contents — and no file contents are attached: the new session reads each file itself with tools. The manifest is part of the editable review text, so editing it changes what the new session is told to read. Review needs the terminal UI showing the source session; otherwise (for example with `opencode run` or the desktop app) the session starts without review.
+The handoff text carries a `## Files` manifest — each path with a description of its contents — and no file contents are attached: the new session reads each file itself with tools. There is no upper bound on the manifest; files are ordered by importance, and with more than 10 the most important 10 form the main manifest while the rest are listed separately as "other context". The manifest is part of the editable review text, so editing it changes what the new session is told to read. Review needs the terminal UI showing the source session; otherwise (for example with `opencode run` or the desktop app) the session starts without review.
 
 To always skip review, set the `review` option to `false`:
 

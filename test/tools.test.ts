@@ -100,6 +100,41 @@ describe("HandoffSession", () => {
     expect(cancelled.content).toBe("The user cancelled the handoff.")
   })
 
+  test("demotes everything past the 10 most important files to other context", async () => {
+    const { ctx, calls } = createHandoffContext("/tmp/project")
+    const files = Array.from({ length: 12 }, (_, index) => ({
+      path: `src/f${index + 1}.ts`,
+      description: `file ${index + 1}`,
+    }))
+
+    const result = await HandoffSession(ctx, (draft) => startHandoff(ctx, draft)).execute(
+      { prompt: "Continue the work", files },
+      TOOL_CONTEXT
+    )
+
+    const text = [
+      "Continuing work from session sess_source. When you lack specific information you can use read_session to get it.",
+      "Continue the work",
+      [
+        "## Files",
+        "",
+        ...Array.from({ length: 10 }, (_, index) => `- \`src/f${index + 1}.ts\` — file ${index + 1}`),
+        "",
+        "## Other context",
+        "",
+        "Listed for completeness; lower priority — read only if the main files leave a gap.",
+        "",
+        "- `src/f11.ts` — file 11",
+        "- `src/f12.ts` — file 12",
+      ].join("\n"),
+    ].join("\n\n")
+
+    expect(calls[2]!.input).toEqual({ sessionID: "sess_new", text })
+    expect(result.content).toBe(
+      "Started handoff session sess_new with 12 listed file(s) — contents are not attached, the new session reads them itself."
+    )
+  })
+
   test("omits the manifest and reports zero files when none are listed", async () => {
     const { ctx, calls } = createHandoffContext("/tmp/project")
 
