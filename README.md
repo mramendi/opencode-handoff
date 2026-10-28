@@ -4,6 +4,8 @@ Create focused handoff prompts for continuing work in new sessions.
 
 Inspired by Amp's handoff command - see their [post](https://ampcode.com/news/handoff) and [manual](https://ampcode.com/manual#handoff) about it.
 
+This is the Misha Ramendik fork that replaces @ ionclusion in forks with bare filenmes to enable context management by the new thread, which will use tools to read files.
+
 ## Features
 
 - `/handoff <goal>` command that analyzes the conversation and generates a continuation prompt
